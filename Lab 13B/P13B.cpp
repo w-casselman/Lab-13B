@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -36,16 +37,81 @@ int dayOfWeek(int month, int day, int year);
 
 void displayCalendar(int month, int year);
 
+void printCalendar(int month, int year, string filename);
+
 int main(void)
 {
 	while (true)
 	{
 		cout << "Enter a date or Q to quit: ";
-		int month, year;
-		cin >> month >> year;
+		string m;
+		int year;
+		cin >> m >> year;
 		if (cin.fail()) break;
 
+		int month;
+		if (m == "January")
+		{
+			month = 1;
+		}
+		else if (m == "February")
+		{
+			month = 2;
+		}
+		else if (m == "March")
+		{
+			month = 3;
+		}
+		else if (m == "April")
+		{
+			month = 4;
+		}
+		else if (m == "May")
+		{
+			month = 5;
+		}
+		else if (m == "June")
+		{
+			month = 6;
+		}
+		else if (m == "July")
+		{
+			month = 7;
+		}
+		else if (m == "August")
+		{
+			month = 8;
+		}
+		else if (m == "September")
+		{
+			month = 9;
+		}
+		else if (m == "October")
+		{
+			month = 10;
+		}
+		else if (m == "November")
+		{
+			month = 11;
+		}
+		else if (m == "December")
+		{
+			month = 12;
+		}
+		else
+		{
+			cout << "Invalid month..." << endl;
+			continue;
+		}
+
+		cout << endl;
 		displayCalendar(month, year);
+
+		cout << endl << "Output file: ";
+		string filename;
+		cin >> filename;
+		printCalendar(month, year, filename);
+		cout << endl;
 	}
 	return 0;
 }
@@ -104,6 +170,24 @@ void displayCalendar(int month, int year)
 
 	int num = 3 * (daysInMonth(month, year) + weekday - 1);
 
+	string m;
+	switch (month)
+	{
+	case  1: m =   "January"; break;
+	case  2: m =  "February"; break;
+	case  3: m =     "March"; break;
+	case  4: m =     "April"; break;
+	case  5: m =       "May"; break;
+	case  6: m =      "June"; break;
+	case  7: m =      "July"; break;
+	case  8: m =    "August"; break;
+	case  9: m = "September"; break;
+	case 10: m =   "October"; break;
+	case 11: m =  "November"; break;
+	default: m =  "December"; break;
+	}
+
+	cout << m << " " << year << endl;
 	cout << "Su Mo Tu We Th Fr Sa " << endl;
 	for (int i = 0; i < 6; i++)
 	{
@@ -115,7 +199,64 @@ void displayCalendar(int month, int year)
 		else
 		{
 			cout << calendar[i].substr(3 * (7 - weekday), num) << endl;
-			break;
+			return;
+		}
+	}
+}
+
+void printCalendar(int month, int year, string filename)
+{
+	//                      Sa Fr Th We Tu Mo Su
+	string calendar[6] = { "                   1  2  3  4  5  6  7 ",
+						   " 2  3  4  5  6  7  8  9 10 11 12 13 14 ",
+						   " 9 10 11 12 13 14 15 16 17 18 19 20 21 ",
+						   "16 17 18 19 20 21 22 23 24 25 26 27 28 ",
+						   "23 24 25 26 27 28 29 30 31             ",
+						   "30 31                                  " };
+
+	int weekday = dayOfWeek(month, 1, year);
+	if (weekday == 0) weekday = 7;
+
+	int num = 3 * (daysInMonth(month, year) + weekday - 1);
+
+	ofstream output;
+	output.open(filename);
+	if (!output.is_open())
+	{
+		cout << "File did not open...";
+		return;
+	}
+
+	string m;
+	switch (month)
+	{
+	case  1: m = "January"; break;
+	case  2: m = "February"; break;
+	case  3: m = "March"; break;
+	case  4: m = "April"; break;
+	case  5: m = "May"; break;
+	case  6: m = "June"; break;
+	case  7: m = "July"; break;
+	case  8: m = "August"; break;
+	case  9: m = "September"; break;
+	case 10: m = "October"; break;
+	case 11: m = "November"; break;
+	default: m = "December"; break;
+	}
+
+	output << m << " " << year << endl;
+	output << "Su Mo Tu We Th Fr Sa " << endl;
+	for (int i = 0; i < 6; i++)
+	{
+		if (num >= 21)
+		{
+			output << calendar[i].substr(3 * (7 - weekday), 21) << endl;
+			num -= 21;
+		}
+		else
+		{
+			output << calendar[i].substr(3 * (7 - weekday), num) << endl;
+			return;
 		}
 	}
 }
