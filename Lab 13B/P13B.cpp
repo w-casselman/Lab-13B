@@ -24,16 +24,54 @@ int daysInMonth(int month, int year);
  @return either 28, 29, 30, or 31, based on month and (leap) year
 */
 
+int dayOfWeek(int month, int day, int year);
+/**
+ dayOfWeek - Computes the weekday of a given date.
+ @param year the year
+ @param month the month (1 = January ... 12 = December)
+ @param day the day of the month
+ @return the weekday (0 = Saturday ... 6 = Friday)
+*/
+
 int main(void)
 {
 	while (true)
 	{
-		cout << "Enter year: ";
-		int month, year;
-		cin >> month >> year;
+		cout << "Enter a date or Q to quit: ";
+		int day, month, year;
+		cin >> month >> day >> year;
 		if (cin.fail()) break;
 
-		cout << endl << daysInMonth(month, year) << endl;
+		int weekday = dayOfWeek(month, day, year);
+
+		switch (weekday)
+		{
+		case  1: cout <<    "Sunday, "; break;
+		case  2: cout <<    "Monday, "; break;
+		case  3: cout <<   "Tuesday, "; break;
+		case  4: cout << "Wednesday, "; break;
+		case  5: cout <<  "Thursday, "; break;
+		case  6: cout <<    "Friday, "; break;
+		default: cout <<  "Saturday, "; break;
+		}
+
+		switch (month)
+		{
+		case  1: cout <<   "January "; break;
+		case  2: cout <<  "February "; break;
+		case  3: cout <<     "March "; break;
+		case  4: cout <<     "April "; break;
+		case  5: cout <<       "May "; break;
+		case  6: cout <<      "June "; break;
+		case  7: cout <<      "July "; break;
+		case  8: cout <<    "August "; break;
+		case  9: cout << "September "; break;
+		case 10: cout <<   "October "; break;
+		case 11: cout <<  "November "; break;
+		default: cout <<  "December "; break;
+		}
+
+		cout << day << ", " << year << endl;
 	}
 
 	return 0;
@@ -59,4 +97,21 @@ int daysInMonth(int month, int year)
 	case 11: return 30;
 	default: return 31;
 	}
+}
+
+int dayOfWeek(int month, int day, int year)
+{
+	int m;
+	int Y;
+	if (month <= 2)
+	{
+		m = month + 12;
+		Y = year - 1;
+	}
+	else
+	{
+		m = month;
+		Y = year;
+	}
+	return (day + int((m + 1) * 26 / 10) + Y + int(Y / 4) + 6 * int(Y / 100) + int(Y / 400)) % 7;
 }
